@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagination in DOM</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
+    }
+    ul#data-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      padding: 10px;
+      background: #f0f0f0;
+      margin: 5px 0;
+      border-radius: 4px;
+    }
+    .pagination {
+      margin-top: 20px;
+    }
+    .pagination button {
+      padding: 8px 12px;
+      margin: 0 3px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .pagination button.disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>DOM Pagination</h2>
+    <ul id="data-list"></ul>
+    <div class="pagination" id="pagination-buttons"></div>
+  </div>
+
+  <script>
+    // Sample data
+    const data = Array.from({ length: 50 }, (_, i) => `Item ${i + 1}`);
+
+    const perPage = 5;
+    let currentPage = 1;
+
+    function renderList() {
+      const list = document.getElementById('data-list');
+      list.innerHTML = '';
+      const start = (currentPage - 1) * perPage;
+      const end = start + perPage;
+      const paginatedItems = data.slice(start, end);
+      paginatedItems.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        list.appendChild(li);
+      });
+    }
+
+    function renderPagination() {
+      const totalPages = Math.ceil(data.length / perPage);
+      const pagination = document.getElementById('pagination-buttons');
+      pagination.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        if (i === currentPage) btn.classList.add('disabled');
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          renderList();
+          renderPagination();
+        });
+        pagination.appendChild(btn);
+      }
+    }
+
+    // Initialize
+    renderList();
+    renderPagination();
+  </script>
+
+  <!-- Add test script for Zenclass -->
+  <script src="https://app.zenclass.in/sheets/v1/js/zen/suite/bundle.js"></script>
+
+</body>
+</html>
+
